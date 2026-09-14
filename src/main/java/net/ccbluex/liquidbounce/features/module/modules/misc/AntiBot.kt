@@ -331,7 +331,7 @@ object AntiBot : Module("AntiBot", Category.MISC) {
 
         if (packet is S13PacketDestroyEntities) {
             for (entityID in packet.entityIDs) {
-                // Remove [entityID] from every list upon deletion
+                // Remove [entityID] from every list upon deletion.
                 groundList -= entityID
                 airList -= entityID
                 invalidGroundList -= entityID
