@@ -47,6 +47,8 @@ object Regen : Module("Regen", Category.PLAYER) {
                 || !timer.hasTimePassed(delay)
             ) return@handler
 
+            // tuff?
+            
             when (mode) {
                 "Vanilla" -> {
                     repeat(speed) {
