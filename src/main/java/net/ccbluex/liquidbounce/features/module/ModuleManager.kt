@@ -200,6 +200,7 @@ object ModuleManager : Listenable, Collection<Module> by MODULE_REGISTRY {
             Speed,
             Sprint,
             StaffDetector,
+            Staller,
             Step,
             StorageESP,
             Strafe,
