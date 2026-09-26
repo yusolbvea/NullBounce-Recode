@@ -1,5 +1,5 @@
 /*
- * Good module
+ * NullBounce Client, Based on LibreBounce (Bro this looks so bad ;-;)
  */
 package net.ccbluex.liquidbounce.features.module.modules.player
 
@@ -21,17 +21,17 @@ object Tweaks : Module("Tweaks", Category.MISC) {
         val player = mc.thePlayer
         if (player == null) return@handler
 
-        // Remove left click cooldown
+        // You can no longer need to use NoClickDelay mods when using NullBounce!
         if (noClickDelay) {
             mc.leftClickCounter = 0
         }
 
-        // Remove block hit delay (specifically for 1.8.9 Sword mechanics)
+        // I didn't know this was an existing thing, might be useful?
         if (noBlockingDelay) {
             mc.playerController.blockHitDelay = 0
         }
 
-        // Handle GUI exit delay simulation
+        // I did not know about this one too...
         if (mc.currentScreen == null && exitGuiDelay) {
             if (prevGui) {
                 updateControls()
