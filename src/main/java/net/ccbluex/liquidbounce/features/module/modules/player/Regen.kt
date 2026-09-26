@@ -98,4 +98,6 @@ object Regen : Module("Regen", Category.PLAYER) {
             timer.reset()
         }
     }
+    override val tag
+        get() = mode
 }
