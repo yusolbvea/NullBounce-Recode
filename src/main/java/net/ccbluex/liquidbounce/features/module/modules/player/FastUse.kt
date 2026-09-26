@@ -15,14 +15,16 @@ import net.ccbluex.liquidbounce.utils.inventory.ItemUtils.isConsumingItem
 import net.ccbluex.liquidbounce.utils.movement.MovementUtils.serverOnGround
 import net.ccbluex.liquidbounce.utils.timing.MSTimer
 import net.minecraft.network.play.client.C03PacketPlayer
+import net.minecraft.network.play.client.C03PacketPlayer.C04PacketPlayerPosition
+import net.minecraft.network.play.client.C03PacketPlayer.C06PacketPlayerPosLook
 
 object FastUse : Module("FastUse", Category.PLAYER) {
 
-    private val mode by choices("Mode", arrayOf("Instant", "NCP", "AAC", "Custom"), "NCP")
+    private val mode by choices("Mode", arrayOf("Instant", "NCP", "AAC", "Custom", "Verus", "Vulcan"), "NCP")
 
-    private val delay by int("CustomDelay", 0, 0..300, suffix = "ms") { mode == "Custom" }
-    private val customSpeed by int("CustomSpeed", 2, 1..35) { mode == "Custom" }
-    private val customTimer by float("CustomTimer", 1.1f, 0.5f..2f) { mode == "Custom" }
+    private val delay by int("PacketDelay", 0, 0..300, suffix = "ms") { mode == "Custom" || mode == "Verus" || mode == "Vulcan" }
+    private val packetCount by int("PacketCount", 2, 1..35) { mode == "Custom" || mode == "Verus" || mode == "Vulcan" }
+    private val customTimer by float("CustomTimer", 1.1f, 0.5f..2f) { mode == "Custom" || mode == "Verus" || mode == "Vulcan" }
 
     private val noMove by boolean("NoMove", false)
 
@@ -71,8 +73,52 @@ object FastUse : Module("FastUse", Category.PLAYER) {
                 if (!msTimer.hasTimePassed(delay))
                     return@handler
 
-                repeat(customSpeed) {
+                repeat(packetCount) {
                     sendPacket(C03PacketPlayer(serverOnGround))
+                }
+
+                msTimer.reset()
+            }
+
+            "Verus" -> {
+                mc.timer.timerSpeed = customTimer
+                usedTimer = true
+
+                if (!msTimer.hasTimePassed(delay))
+                    return@handler
+
+                repeat(packetCount) {
+                    sendPacket(
+                        C04PacketPlayerPosition(
+                            player.posX,
+                            player.posY,
+                            player.posZ,
+                            serverOnGround
+                        )
+                    )
+                }
+
+                msTimer.reset()
+            }
+
+            "Vulcan" -> {
+                mc.timer.timerSpeed = customTimer
+                usedTimer = true
+
+                if (!msTimer.hasTimePassed(delay))
+                    return@handler
+
+                repeat(packetCount) {
+                    sendPacket(
+                        C06PacketPlayerPosLook(
+                            player.posX,
+                            player.posY,
+                            player.posZ,
+                            player.rotationYaw,
+                            player.rotationPitch,
+                            serverOnGround
+                        )
+                    )
                 }
 
                 msTimer.reset()
