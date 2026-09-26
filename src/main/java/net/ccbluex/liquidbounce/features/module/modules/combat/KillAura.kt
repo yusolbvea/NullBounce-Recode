@@ -518,7 +518,8 @@ object KillAura : Module("KillAura", Category.COMBAT, Keyboard.KEY_R) {
                 stopBlocking(true)
             }
         }
-
+    } // WHY AM I FORGETTING TO PUT BRACES DUHHHHHHHHHHH
+     
     /**
      * Render event
      */
