@@ -117,7 +117,7 @@ object ClientRichPresence : Configurable("DiscordRPC"), MinecraftInstance, Liste
                 if (showRPCServerIP) {
                     setDetails(customRPCText.ifEmpty {
                         "Server: ${
-                            if (mc.isIntegratedServerRunning || serverData == null) "Singleplayer"
+                            if (mc.isIntegratedServerRunning || serverData == null) "Local world"
                             else ServerUtils.hideSensitiveInformation(serverData.serverIP)
                         }"
                     })
