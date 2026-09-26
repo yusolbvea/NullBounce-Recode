@@ -37,67 +37,69 @@ object Regen : Module("Regen", Category.PLAYER) {
         if (resetTimer) mc.timer.timerSpeed = 1F
         else resetTimer = false
 
-        mc.thePlayer?.run {
-            if (
-                !mc.playerController.gameIsSurvivalOrAdventure()
-                || noAir && !serverOnGround
-                || !isEntityAlive
-                || health >= healthToRegen
-                || (potionEffect && !isPotionActive(Potion.regeneration))
-                || !timer.hasTimePassed(delay)
-            ) return@handler
+        val player = mc.thePlayer ?: return@handler
 
-            // tuff?
-            
-            when (mode) {
-                "Vanilla" -> {
-                    repeat(speed) {
+        if (
+            !mc.playerController.gameIsSurvivalOrAdventure()
+            || noAir && !serverOnGround
+            || !player.isEntityAlive
+            || player.health >= healthToRegen
+            || (potionEffect && !player.isPotionActive(Potion.regeneration))
+            || !timer.hasTimePassed(delay)
+        ) return@handler
+
+        // tuff?
+
+        when (mode) {
+            "Vanilla" -> {
+                repeat(speed) {
+                    sendPacket(C03PacketPlayer(serverOnGround))
+                }
+            }
+
+            "Spartan" -> {
+                if (!isMoving && serverOnGround) {
+                    repeat(9) {
                         sendPacket(C03PacketPlayer(serverOnGround))
                     }
+
+                    mc.timer.timerSpeed = 0.45F
+                    resetTimer = true
                 }
+            }
 
-                "Spartan" -> {
-                    if (!isMoving && serverOnGround) {
-                        repeat(9) {
-                            sendPacket(C03PacketPlayer(serverOnGround))
-                        }
-
-                        mc.timer.timerSpeed = 0.45F
-                        resetTimer = true
-                    }
-                }
-
-                "OldVerus" -> {
+            "OldVerus" -> {
                 repeat(speed) {
                     sendPacket(
                         C04PacketPlayerPosition(
-                            thePlayer.posX,
-                            thePlayer.posY,
-                            thePlayer.posZ,
-                            serverOnGround
-                            )
-                        )
-                    }
-                }
-
-                "OldGrim" -> {
-                repeat(speed) {
-                    sendPacket(
-                        C03PacketPlayer.C06PacketPlayerPosLook(
-                            thePlayer.posX,
-                            thePlayer.posY,
-                            thePlayer.posZ,
-                            thePlayer.rotationYaw,
-                            thePlayer.rotationPitch,
+                            player.posX,
+                            player.posY,
+                            player.posZ,
                             serverOnGround
                         )
                     )
                 }
             }
 
-            timer.reset()
+            "OldGrim" -> {
+                repeat(speed) {
+                    sendPacket(
+                        C06PacketPlayerPosLook(
+                            player.posX,
+                            player.posY,
+                            player.posZ,
+                            player.rotationYaw,
+                            player.rotationPitch,
+                            serverOnGround
+                        )
+                    )
+                }
+            }
         }
+
+        timer.reset()
     }
+
     override val tag
         get() = mode
 }
