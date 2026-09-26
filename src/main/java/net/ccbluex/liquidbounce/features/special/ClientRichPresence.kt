@@ -125,7 +125,7 @@ object ClientRichPresence : Configurable("DiscordRPC"), MinecraftInstance, Liste
 
                 // Set modules count info
                 if (showRPCModulesCount) {
-                    setState("Enabled ${moduleManager.count { it.state }} of ${moduleManager.size} modules")
+                    setState("${moduleManager.count { it.state }} active modules of ${moduleManager.size} modules")
                 }
             }
         }
