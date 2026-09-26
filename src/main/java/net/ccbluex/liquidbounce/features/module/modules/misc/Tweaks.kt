@@ -7,19 +7,18 @@ import net.ccbluex.liquidbounce.event.MotionEvent
 import net.ccbluex.liquidbounce.event.handler
 import net.ccbluex.liquidbounce.features.module.base.Category
 import net.ccbluex.liquidbounce.features.module.base.Module
-import net.ccbluex.liquidbounce.utils.movement.MovementUtils.updateControls
+import net.minecraft.client.settings.GameSettings
 
 object Tweaks : Module("Tweaks", Category.MISC) {
 
     private val noClickDelay by boolean("NoClickDelay", true)
     private val noBlockingDelay by boolean("NoBlockHitDelay", false)
-    private val exitGuiDelay by boolean("NoExitGuiDelay", true)
+    private val saveMoveKeys by boolean("SaveMoveKeys", true)
 
     private var prevGui = false
 
     val onMotion = handler<MotionEvent> {
-        val player = mc.thePlayer
-        if (player == null) return@handler
+        if (mc.thePlayer == null) return@handler
 
         // You can no longer need to use NoClickDelay mods when using NullBounce!
         if (noClickDelay) {
@@ -31,10 +30,15 @@ object Tweaks : Module("Tweaks", Category.MISC) {
             mc.playerController.blockHitDelay = 0
         }
 
-        // I did not know about this one too...
-        if (mc.currentScreen == null && exitGuiDelay) {
+        // This will allow you to walk again if you previously pressed movement keys and opened a container.
+        if (mc.currentScreen == null && saveMoveKeys) {
             if (prevGui) {
-                updateControls()
+                mc.gameSettings.keyBindForward.pressed = GameSettings.isKeyDown(mc.gameSettings.keyBindForward)
+                mc.gameSettings.keyBindBack.pressed = GameSettings.isKeyDown(mc.gameSettings.keyBindBack)
+                mc.gameSettings.keyBindRight.pressed = GameSettings.isKeyDown(mc.gameSettings.keyBindRight)
+                mc.gameSettings.keyBindLeft.pressed = GameSettings.isKeyDown(mc.gameSettings.keyBindLeft)
+                mc.gameSettings.keyBindJump.pressed = GameSettings.isKeyDown(mc.gameSettings.keyBindJump)
+                mc.gameSettings.keyBindSprint.pressed = GameSettings.isKeyDown(mc.gameSettings.keyBindSprint)
             }
             prevGui = false
         } else {
