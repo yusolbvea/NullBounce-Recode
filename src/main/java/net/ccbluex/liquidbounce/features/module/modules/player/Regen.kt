@@ -58,7 +58,7 @@ object Regen : Module("Regen", Category.PLAYER) {
             }
 
             "Spartan" -> {
-                if (!isMoving && serverOnGround) {
+                if (!player.isMoving && serverOnGround) {
                     repeat(9) {
                         sendPacket(C03PacketPlayer(serverOnGround))
                     }
