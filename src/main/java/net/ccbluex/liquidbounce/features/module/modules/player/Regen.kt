@@ -20,11 +20,11 @@ import net.minecraft.potion.Potion
 
 object Regen : Module("Regen", Category.PLAYER) {
 
-    private val mode by choices("Mode", arrayOf("Vanilla", "Spartan", "OldVerus", "OldGrim"), "Vanilla")
-    private val speed by int("Speed", 100, 1..150) { mode == "Vanilla" }
+    private val mode by choices("Mode", arrayOf("Vanilla", "Spartan", "Verus", "OldGrim"), "Vanilla")
+    private val speed by int("PacketSpeed", 100, 1..150) { mode == "Vanilla" || "OldVerus" || "OldGrim" }
 
-    private val delay by int("Delay", 0, 0..10000, suffix = "ms")
-    private val healthToRegen by int("Health", 18, 0..20)
+    private val delay by int("PacketDelay", 0, 0..10000, suffix = "ms")
+    private val healthToRegen by int("Health", 20, 0..20)
 
     private val noAir by boolean("NotWhileInAir", false)
     private val potionEffect by boolean("OnRegenerationPot", false)
@@ -68,7 +68,7 @@ object Regen : Module("Regen", Category.PLAYER) {
                 }
             }
 
-            "OldVerus" -> {
+            "Verus" -> {
                 repeat(speed) {
                     sendPacket(
                         C04PacketPlayerPosition(
