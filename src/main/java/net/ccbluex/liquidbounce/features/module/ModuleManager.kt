@@ -215,6 +215,7 @@ object ModuleManager : Listenable, Collection<Module> by MODULE_REGISTRY {
             Timer,
             Tracers,
             TrueSight,
+            Tweaks,
             VehicleOneHit,
             Velocity,
             WallClimb,
