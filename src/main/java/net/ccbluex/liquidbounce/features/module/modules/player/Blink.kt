@@ -22,11 +22,11 @@ object Blink : Module("Blink", Category.PLAYER, gameDetecting = false) {
     private val pulse by boolean("Pulse", false)
     private val pulseDelay by int("PulseDelay", 1000, 1..5000, suffix = "ms") { pulse }
 
-    private val line by boolean("Line", true).subjective()
+    private val line by boolean("TraceLine", true).subjective()
     private val lineColor by color("LineColor", Color(132, 102, 255, 255)) { line }.subjective()
 
     // TODO: Replace with something similar to RenderModel in FakeLag
-    private val fakePlayer by boolean("FakePlayer", false)
+    private val fakePlayer by boolean("DummyPlayer", false)
 
     private val pulseTimer = MSTimer()
 
