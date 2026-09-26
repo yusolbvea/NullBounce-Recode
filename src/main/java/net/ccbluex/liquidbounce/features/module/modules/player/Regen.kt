@@ -14,19 +14,20 @@ import net.ccbluex.liquidbounce.utils.extensions.isMoving
 import net.ccbluex.liquidbounce.utils.movement.MovementUtils.serverOnGround
 import net.ccbluex.liquidbounce.utils.timing.MSTimer
 import net.minecraft.network.play.client.C03PacketPlayer
+import net.minecraft.network.play.client.C03PacketPlayer.C04PacketPlayerPosition
+import net.minecraft.network.play.client.C03PacketPlayer.C06PacketPlayerPosLook
 import net.minecraft.potion.Potion
 
 object Regen : Module("Regen", Category.PLAYER) {
 
-    private val mode by choices("Mode", arrayOf("Vanilla", "Spartan"), "Vanilla")
-    private val speed by int("Speed", 100, 1..100) { mode == "Vanilla" }
+    private val mode by choices("Mode", arrayOf("Vanilla", "Spartan", "OldVerus", "OldGrim"), "Vanilla")
+    private val speed by int("Speed", 100, 1..150) { mode == "Vanilla" }
 
     private val delay by int("Delay", 0, 0..10000, suffix = "ms")
     private val healthToRegen by int("Health", 18, 0..20)
-    private val food by int("Food", 18, 0..20)
 
-    private val noAir by boolean("NoAir", false)
-    private val potionEffect by boolean("PotionEffect", false)
+    private val noAir by boolean("NotWhileInAir", false)
+    private val potionEffect by boolean("OnRegenerationPot", false)
 
     private val timer = MSTimer()
 
@@ -40,7 +41,6 @@ object Regen : Module("Regen", Category.PLAYER) {
             if (
                 !mc.playerController.gameIsSurvivalOrAdventure()
                 || noAir && !serverOnGround
-                || foodStats.foodLevel <= food
                 || !isEntityAlive
                 || health >= healthToRegen
                 || (potionEffect && !isPotionActive(Potion.regeneration))
@@ -65,6 +65,33 @@ object Regen : Module("Regen", Category.PLAYER) {
                         mc.timer.timerSpeed = 0.45F
                         resetTimer = true
                     }
+                }
+
+                "OldVerus" -> {
+                repeat(speed) {
+                    sendPacket(
+                        C04PacketPlayerPosition(
+                            thePlayer.posX,
+                            thePlayer.posY,
+                            thePlayer.posZ,
+                            serverOnGround
+                            )
+                        )
+                    }
+                }
+
+                "OldGrim" -> {
+                repeat(speed) {
+                    sendPacket(
+                        C03PacketPlayer.C06PacketPlayerPosLook(
+                            thePlayer.posX,
+                            thePlayer.posY,
+                            thePlayer.posZ,
+                            thePlayer.rotationYaw,
+                            thePlayer.rotationPitch,
+                            serverOnGround
+                        )
+                    )
                 }
             }
 
