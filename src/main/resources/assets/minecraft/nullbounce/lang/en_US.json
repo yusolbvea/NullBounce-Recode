@@ -5,12 +5,13 @@
         "Zywl",
         "CzechHek",
         "EclipsesDev",
+        "G9292",
         "thatonecoder"
     ],
     "translations": {
         "menu.altManager": "Accounts",
         "menu.fontManager": "Fonts",
-        "menu.mods": "Forge Modlist",
+        "menu.mods": "Extras",
         "menu.serverStatus": "Server Status",
         "menu.configuration": "Client Settings",
         "menu.contributors": "Contributors",
@@ -220,7 +221,7 @@
 
         "module.ghostHand.description": "Allows you to interact with selected blocks through walls.",
 
-        "module.godMode.description": "GodMode Exploit for AAC",
+        "module.godMode.description": "GodMode Exploit for AAC.",
 
         "module.hUD.description": "Toggles visibility of the HUD.",
 
@@ -378,6 +379,8 @@
 
         "module.staffDetector.description": "Detects and notifies you of staff members on the current server",
 
+        "module.staller.description": "It lets only pass 1 transaction packet when joining, then cancels every other.",
+
         "module.step.description": "Allows you to step up blocks.",
 
         "module.storageESP.description": "Allows you to see storarge (e.g., chests) through walls.",
@@ -407,6 +410,8 @@
         "module.tracers.description": "Draws path lines to targets around you.",
 
         "module.trueSight.description": "Allows you to see invisible entities and barriers.",
+
+        "module.tweaks.description": "Some useful additional tweaks for your game.",
 
         "module.vehicleOneHit.description": "Allows you to break vehicles with a single hit.",
 
