@@ -135,7 +135,11 @@ object KillAura : Module("KillAura", Category.COMBAT, Keyboard.KEY_R) {
 
     // AutoBlock
     // TODO: Remove the Fake mode, and fully replace it with the ForceBlockRender option?
-    val autoBlock by choices("AutoBlock", arrayOf("Off", "Packet", "Fake"), "Packet")
+    val autoBlock by choices("AutoBlock", arrayOf("Off", "Packet", "Fake"), "Packet") 
+
+    private val attackWhileBlocking by boolean("AttackWhileBlocking", true) {
+        autoBlock == "Off"
+    }
 
     private val unblockMode by choices(
         "UnblockMode", arrayOf("Stop", "Switch", "Empty", "Cancel"), "Stop"
@@ -452,14 +456,6 @@ object KillAura : Module("KillAura", Category.COMBAT, Keyboard.KEY_R) {
         if (target != null) {
             val distance = player.getDistanceToEntityBox(target!!)
             
-            if (autoBlock != "Off") {
-                renderBlocking = true
-                
-                if (!blockStatus && canBlock && autoBlock == "Packet") {
-                    startBlocking(target!!, interactAutoBlock, false)
-                }
-            }
-            
             // Usually when you butterfly click, you end up clicking two (and possibly more) times in a single tick.
             // Sometimes you also do not click. The positives outweigh the negatives, however.
             val extraClicks = if (simulateDoubleClicking && !simulateCooldown) nextInt(-1, 1) else 0
@@ -474,29 +470,54 @@ object KillAura : Module("KillAura", Category.COMBAT, Keyboard.KEY_R) {
             val prevHittable = hittable
 
             updateHittable()
-
+            
             if (!prevHittable && hittable && maxClicks == 0 && forceFirstHit) {
                 maxClicks++
             }
 
+            if (autoBlock != "Off") {
+                renderBlocking = true
+            }
+
             repeat(maxClicks) {
                 val wasBlocking = blockStatus
-
+                
+                if (
+                    autoBlock == "Off" &&
+                    player.isBlocking &&
+                    !attackWhileBlocking
+                ) {
+                    clicks--
+                    return@repeat
+                }
+                    
                 runAttack(it == 0, it + 1 == maxClicks)
                 clicks--
 
-                if (wasBlocking && !blockStatus && (releaseAutoBlock && !ignoreTickRule || autoBlock == "Off")) {
+                if (wasBlocking && 
+                    !blockStatus &&
+                    (releaseAutoBlock && !ignoreTickRule || autoBlock == "Off")
+                ) {
                     return@handler
                 }
             }
+
+            // An attempt to fix a bug on attack
+            if (
+                maxClicks <= 0 &&
+                !blockStatus &&
+                canBlock &&
+                autoBlock == "Packet"
+            ) {
+                startBlocking(target!!, interactAutoBlock, false)
+            }
         } else {
             renderBlocking = false
-            
+
             if (blockStatus) {
                 stopBlocking(true)
             }
         }
-    }
 
     /**
      * Render event
