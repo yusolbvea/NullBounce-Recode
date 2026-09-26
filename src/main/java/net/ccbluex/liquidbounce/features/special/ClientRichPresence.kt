@@ -106,7 +106,7 @@ object ClientRichPresence : Configurable("DiscordRPC"), MinecraftInstance, Liste
 
             // Check assets contains logo and set logo
             assets["logo"]?.let {
-                setLargeImage(it, "MC $MINECRAFT_VERSION - $CLIENT_NAME $clientVersionText $clientCommit")
+                setLargeImage(it, "Minecraft $MINECRAFT_VERSION - NullBounce $clientVersionText $clientCommit")
             }
 
             // Check user is in-game
