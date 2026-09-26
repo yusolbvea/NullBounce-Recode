@@ -26,7 +26,7 @@ object FastUse : Module("FastUse", Category.PLAYER) {
     private val packetCount by int("PacketCount", 2, 1..35) { mode == "Custom" || mode == "Verus" || mode == "Vulcan" }
     private val customTimer by float("CustomTimer", 1.1f, 0.5f..2f) { mode == "Custom" || mode == "Verus" || mode == "Vulcan" }
 
-    private val noMove by boolean("NoMove", false)
+    private val noMove by boolean("StopCurrentMotion", false)
 
     private val msTimer = MSTimer()
     private var usedTimer = false
