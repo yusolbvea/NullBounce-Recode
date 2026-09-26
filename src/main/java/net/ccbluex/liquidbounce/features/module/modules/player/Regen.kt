@@ -21,7 +21,7 @@ import net.minecraft.potion.Potion
 object Regen : Module("Regen", Category.PLAYER) {
 
     private val mode by choices("Mode", arrayOf("Vanilla", "Spartan", "Verus", "OldGrim"), "Vanilla")
-    private val speed by int("PacketSpeed", 100, 1..150) { mode == "Vanilla" || "Verus" || "OldGrim" }
+    private val speed by int("PacketSpeed", 100, 1..150) { mode == "Vanilla" || mode == "Verus" || mode == "OldGrim" }
 
     private val delay by int("PacketDelay", 0, 0..10000, suffix = "ms")
     private val healthToRegen by int("Health", 20, 0..20)
