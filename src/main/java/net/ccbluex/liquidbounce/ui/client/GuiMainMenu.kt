@@ -220,11 +220,8 @@ class GuiMainMenu : AbstractScreen() {
 
     override fun drawScreen(mouseX: Int, mouseY: Int, partialTicks: Float) {
         // Render vanilla rotating skybox panorama & gradient overlay
-        mc.textureManager.bindTexture(optionsBackground)
-        this.renderSkybox(mouseX, mouseY, partialTicks)
-        this.drawGradientRect(0, 0, width, height, -2130706433, 16777215)
-        this.drawGradientRect(0, 0, width, height, 0, Integer.MIN_VALUE)
-
+        drawBackground(0)
+        
         // Title positioned higher (height / 12F)
         val titleY = height / 12F
         Fonts.fontBold180.drawCenteredString(CLIENT_NAME, width / 2F, titleY, 4673984, true)
