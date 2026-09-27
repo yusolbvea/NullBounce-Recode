@@ -20,11 +20,11 @@ import net.minecraft.network.play.client.C03PacketPlayer.C06PacketPlayerPosLook
 
 object FastUse : Module("FastUse", Category.PLAYER) {
 
-    private val mode by choices("Mode", arrayOf("Instant", "NCP", "AAC", "Custom", "Verus", "Vulcan"), "NCP")
+    private val mode by choices("Mode", arrayOf("Instant", "NCP", "AAC", "Custom", "Verus", "Vulcan", "Timer"), "NCP")
 
     private val delay by int("PacketDelay", 0, 0..300, suffix = "ms") { mode == "Custom" || mode == "Verus" || mode == "Vulcan" }
     private val packetCount by int("PacketCount", 2, 1..35) { mode == "Custom" || mode == "Verus" || mode == "Vulcan" }
-    private val customTimer by float("CustomTimer", 1.1f, 0.5f..2f) { mode == "Custom" || mode == "Verus" || mode == "Vulcan" }
+    private val customTimer by float("CustomTimer", 1.1f, 0.5f..150f) { mode == "Custom" || mode == "Verus" || mode == "Vulcan" || mode == "Timer"}
 
     private val noMove by boolean("StopCurrentMotion", false)
 
@@ -122,6 +122,11 @@ object FastUse : Module("FastUse", Category.PLAYER) {
                 }
 
                 msTimer.reset()
+            }
+
+            "Timer" -> {
+                mc.timer.timerSpeed = customTimer
+                usedTimer = true
             }
         }
     }
