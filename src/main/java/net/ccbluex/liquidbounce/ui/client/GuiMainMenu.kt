@@ -69,31 +69,36 @@ class GuiMainMenu : AbstractScreen() {
         }
     }
 
-override fun initGui() {
+    override fun initGui() {
         val buttonWidth = 200
         val buttonHeight = 20
         val spacing = 24
-        
-        // Center the vertical stack on screen
+    
         val startX = width / 2 - buttonWidth / 2
-        var startY = height / 4 + 10
+        // Lowered start position so buttons never hit the title
+        var startY = height / 3 + 10
 
+        // Singleplayer & Multiplayer
         +GuiButton(1, startX, startY, buttonWidth, buttonHeight, I18n.format("menu.singleplayer"))
         startY += spacing
-        
+    
         +GuiButton(2, startX, startY, buttonWidth, buttonHeight, I18n.format("menu.multiplayer"))
         startY += spacing
-        
+    
+        // Alt Manager
         +GuiButton(100, startX, startY, buttonWidth, buttonHeight, translationMenu("altManager"))
         startY += spacing
 
+        // Split Row: Fonts & Configs
         +GuiButton(109, startX, startY, 98, buttonHeight, translationMenu("fontManager"))
         +GuiButton(102, startX + 102, startY, 98, buttonHeight, translationMenu("configuration"))
-        startY += spacing
+         startY += spacing
 
+        // Mods
         +GuiButton(103, startX, startY, buttonWidth, buttonHeight, translationMenu("mods"))
         startY += spacing
 
+        // Split Row: Options & Quit
         +GuiButton(0, startX, startY, 98, buttonHeight, I18n.format("menu.options"))
         +GuiButton(4, startX + 102, startY, 98, buttonHeight, I18n.format("menu.quit"))
     }
@@ -214,25 +219,21 @@ override fun initGui() {
 
 
     override fun drawScreen(mouseX: Int, mouseY: Int, partialTicks: Float) {
-        mc.getTextureManager().bindTexture(optionsBackground) // fallback binding
+        // Render vanilla rotating skybox panorama & gradient overlay
+        mc.textureManager.bindTexture(optionsBackground)
         this.renderSkybox(mouseX, mouseY, partialTicks)
-
         this.drawGradientRect(0, 0, width, height, -2130706433, 16777215)
         this.drawGradientRect(0, 0, width, height, 0, Integer.MIN_VALUE)
 
-        /* drawRoundedBorderRect(
-            width / 2f - 115, height / 4f + 35, width / 2f + 115, height / 4f + 175,
-            2f,
-            Integer.MIN_VALUE,
-            Integer.MIN_VALUE,
-            3F
-        ) */
-
-        Fonts.fontBold180.drawCenteredString(CLIENT_NAME, width / 2F, height / 8F, 4673984, true)
+        // Title positioned higher (height / 12F)
+        val titleY = height / 12F
+        Fonts.fontBold180.drawCenteredString(CLIENT_NAME, width / 2F, titleY, 4673984, true)
+    
+        // Subtitle / Version directly below title
         Fonts.font35.drawCenteredString(
             clientVersionText,
-            width / 2F + 148,
-            height / 8F + Fonts.font35.fontHeight,
+            width / 2F,
+            titleY + Fonts.fontBold180.fontHeight + 2F,
             0xffffff,
             true
         )
@@ -240,7 +241,7 @@ override fun initGui() {
         super.drawScreen(mouseX, mouseY, partialTicks)
 
         if (popup != null) {
-            popup!!.drawScreen(width, height, mouseX, mouseY)
+        popup!!.drawScreen(width, height, mouseX, mouseY)
         }
     }
 
