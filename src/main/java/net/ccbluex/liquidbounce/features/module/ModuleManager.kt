@@ -211,6 +211,7 @@ object ModuleManager : Listenable, Collection<Module> by MODULE_REGISTRY {
             TNTESP,
             TNTTimer,
             Teams,
+            Test,
             TimerRange,
             Timer,
             Tracers,
