@@ -16,7 +16,7 @@ import net.ccbluex.liquidbounce.utils.extensions.isMoving
 object Timer : Module("Timer", Category.WORLD, gameDetecting = false) {
 
     private val mode by choices("Mode", arrayOf("OnMove", "NoMove", "Always"), "OnMove")
-    private val speed by float("Speed", 2f, 0.1f..10f)
+    private val speed by float("Speed", 2f, 0.1f..150f)
 
     override fun onDisable() {
         mc.thePlayer ?: return
