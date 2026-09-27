@@ -70,7 +70,7 @@ object LiquidBounce {
      *
      * This has all the basic information.
      */
-    const val CLIENT_NAME = "NullBounce"
+    const val CLIENT_NAME = "NullBounce Recode"
     const val CLIENT_AUTHOR = "CCBlueX, thatonecoder, ywsqlbvxx/G9292"
     const val CLIENT_CLOUD = "https://cloud.liquidbounce.net/LiquidBounce"
     const val CLIENT_WEBSITE = "https://github.com/ywsqlbvxx/NullBounce-Recode"
