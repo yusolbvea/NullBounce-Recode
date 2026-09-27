@@ -188,7 +188,7 @@ object Scaffold : Module("Scaffold", Category.WORLD, Keyboard.KEY_I) {
     private val useSneakMidAir by boolean("UseSneakMidAir", false) { zitterMode == "Smooth" }
 
     // Game
-    val timer by float("Timer", 1f, 0.1f..10f)
+    val timer by float("Timer", 1f, 0.1f..150f)
     private val speedModifier by float("SpeedModifier", 1f, 0f..2f)
     private val speedLimiter by boolean("SpeedLimiter", false) { !slow }
     private val speedLimit by float("SpeedLimit", 0.11f, 0.01f..0.18f) { !slow && speedLimiter }
