@@ -70,7 +70,7 @@ object LiquidBounce {
      *
      * This has all the basic information.
      */
-    const val CLIENT_NAME = "NullBounce Recode"
+    const val CLIENT_NAME = "NullBounce"
     const val CLIENT_AUTHOR = "CCBlueX, thatonecoder, ywsqlbvxx/G9292"
     const val CLIENT_CLOUD = "https://cloud.liquidbounce.net/LiquidBounce"
     const val CLIENT_WEBSITE = "https://github.com/ywsqlbvxx/NullBounce-Recode"
@@ -92,7 +92,7 @@ object LiquidBounce {
     val nightlyText = if (IN_DEV) " (Nightly) " else " "
 
     // Perhaps the client commit number should be omitted? Not certain
-    val clientTitle = CLIENT_NAME + " " + clientVersionText + nightlyText + clientCommit + " | " + MINECRAFT_VERSION
+    val clientTitle = "NullBounce Recode" + " " + clientVersionText + nightlyText + clientCommit + " | " + MINECRAFT_VERSION
 
     var isStarting = true
 
@@ -252,7 +252,7 @@ object LiquidBounce {
             }
 
             // Load background
-            FileManager.loadBackground()
+            // FileManager.loadBackground() (grayed out as im totally sick of the dirt options BG)
         } catch (e: Exception) {
             LOGGER.error("Failed to start client: ${e.message}")
             e.showErrorPopup()
