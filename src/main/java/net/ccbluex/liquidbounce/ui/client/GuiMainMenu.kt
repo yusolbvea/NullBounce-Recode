@@ -69,27 +69,33 @@ class GuiMainMenu : AbstractScreen() {
         }
     }
 
-    override fun initGui() {
-        val defaultHeight = height / 4 + 48
+override fun initGui() {
+        val buttonWidth = 200
+        val buttonHeight = 20
+        val spacing = 24
+        
+        // Center the vertical stack on screen
+        val startX = width / 2 - buttonWidth / 2
+        var startY = height / 4 + 10
 
-        val baseCol1 = width / 2 - 100
-        val baseCol2 = width / 2 + 2
+        +GuiButton(1, startX, startY, buttonWidth, buttonHeight, I18n.format("menu.singleplayer"))
+        startY += spacing
+        
+        +GuiButton(2, startX, startY, buttonWidth, buttonHeight, I18n.format("menu.multiplayer"))
+        startY += spacing
+        
+        +GuiButton(100, startX, startY, buttonWidth, buttonHeight, translationMenu("altManager"))
+        startY += spacing
 
-        +GuiButton(100, baseCol1, defaultHeight + 24, 98, 20, translationMenu("altManager"))
-        +GuiButton(103, baseCol2, defaultHeight + 24, 98, 20, translationMenu("mods"))
-        +GuiButton(109, baseCol1, defaultHeight + 24 * 2, 98, 20, translationMenu("fontManager"))
-        +GuiButton(102, baseCol2, defaultHeight + 24 * 2, 98, 20, translationMenu("configuration"))
-        +GuiButton(101, baseCol1, defaultHeight + 24 * 3, 98, 20, translationMenu("serverStatus"))
-        +GuiButton(108, baseCol2, defaultHeight + 24 * 3, 98, 20, translationMenu("contributors"))
+        +GuiButton(109, startX, startY, 98, buttonHeight, translationMenu("fontManager"))
+        +GuiButton(102, startX + 102, startY, 98, buttonHeight, translationMenu("configuration"))
+        startY += spacing
 
-        +GuiButton(1, baseCol1, defaultHeight, 98, 20, I18n.format("menu.singleplayer"))
-        +GuiButton(2, baseCol2, defaultHeight, 98, 20, I18n.format("menu.multiplayer"))
+        +GuiButton(103, startX, startY, buttonWidth, buttonHeight, translationMenu("mods"))
+        startY += spacing
 
-        // Minecraft Realms
-        //        +GuiButton(14, this.baseCol1, j + 24 * 2, I18n.format("menu.online"))
-
-        +GuiButton(0, baseCol1, defaultHeight + 24 * 4, 98, 20, I18n.format("menu.options"))
-        +GuiButton(4, baseCol2, defaultHeight + 24 * 4, 98, 20, I18n.format("menu.quit"))
+        +GuiButton(0, startX, startY, 98, buttonHeight, I18n.format("menu.options"))
+        +GuiButton(4, startX + 102, startY, 98, buttonHeight, I18n.format("menu.quit"))
     }
 
     private fun showWelcomePopup() {
@@ -208,7 +214,11 @@ class GuiMainMenu : AbstractScreen() {
 
 
     override fun drawScreen(mouseX: Int, mouseY: Int, partialTicks: Float) {
-        drawBackground(0)
+        mc.getTextureManager().bindTexture(optionsBackground) // fallback binding
+        this.renderSkybox(mouseX, mouseY, partialTicks)
+
+        this.drawGradientRect(0, 0, width, height, -2130706433, 16777215)
+        this.drawGradientRect(0, 0, width, height, 0, Integer.MIN_VALUE)
 
         drawRoundedBorderRect(
             width / 2f - 115, height / 4f + 35, width / 2f + 115, height / 4f + 175,
