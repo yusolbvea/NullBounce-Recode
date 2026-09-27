@@ -252,7 +252,7 @@ object LiquidBounce {
             }
 
             // Load background
-            // FileManager.loadBackground() (grayed out as im totally sick of the dirt options BG)
+            FileManager.loadBackground()
         } catch (e: Exception) {
             LOGGER.error("Failed to start client: ${e.message}")
             e.showErrorPopup()
