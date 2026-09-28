@@ -8,7 +8,7 @@ import org.lwjgl.opengl.Display
 
 object ClientConfiguration : Configurable("ClientConfiguration"), MinecraftInstance {
     var clientTitle by boolean("ClientTitle", true)
-    var customBackground by boolean("CustomBackground", true)
+    var customBackground by boolean("CustomBackground", false) // TODO: Client shaders are broken causing flashing lights in main menu, maybe forgeGradle used broke client shaders?
     var particles by boolean("Particles", false)
     var stylisedAlts by boolean("StylisedAlts", true)
     var unformattedAlts by boolean("CleanAlts", true)
