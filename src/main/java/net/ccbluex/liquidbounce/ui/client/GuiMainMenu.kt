@@ -219,14 +219,11 @@ class GuiMainMenu : AbstractScreen() {
 
 
     override fun drawScreen(mouseX: Int, mouseY: Int, partialTicks: Float) {
-        // Render vanilla rotating skybox panorama & gradient overlay
         drawBackground(0)
         
-        // Title positioned higher (height / 12F)
         val titleY = height / 12F
         Fonts.fontBold180.drawCenteredString(CLIENT_NAME, width / 2F, titleY, 4673984, true)
     
-        // Subtitle / Version directly below title
         Fonts.font35.drawCenteredString(
             clientVersionText,
             width / 2F,
@@ -237,8 +234,49 @@ class GuiMainMenu : AbstractScreen() {
 
         super.drawScreen(mouseX, mouseY, partialTicks)
 
+        val font = Fonts.font35
+        val textAlphaColor = 0x88FFFFFF.toInt()
+        val lh = font.fontHeight + 2F
+
+        // 1. TOP LEFT: Developer Credits
+        val devLines = arrayOf(
+            "§7Developed by:",
+            "§8- §fCCBlueX §7(LiquidBounce Team)",
+            "§8- §fEclipsesDev, mems1 §7(Legacy Branch Lead Community Maintainers)",
+            "§8- §fthatonecoder §7(LibreBounce Main Developer)",
+            "§8- §fG9292 §7(Main Developer of this custom LibreBounce fork)"
+        )
+
+        var topLeftY = 6F
+        for (line in devLines) {
+            font.drawString(line, 6F, topLeftY, textAlphaColor, true)
+            topLeftY += lh
+        }
+
+        // 2. BOTTOM LEFT: Modded Version Tag
+        val bottomMargin = 6F
+        val bottomLeftText = "Minecraft 1.8.9 (Modded)"
+        font.drawString(
+            bottomLeftText,
+            6F,
+            height - font.fontHeight - bottomMargin,
+            textAlphaColor,
+            true
+        )
+
+        // 3. BOTTOM RIGHT: Client Version
+        val bottomRightText = clientVersionText
+        val bottomRightWidth = font.getStringWidth(bottomRightText)
+        font.drawString(
+            bottomRightText,
+            width - bottomRightWidth - 6F,
+            height - font.fontHeight - bottomMargin,
+            textAlphaColor,
+            true
+        )
+
         if (popup != null) {
-        popup!!.drawScreen(width, height, mouseX, mouseY)
+            popup!!.drawScreen(width, height, mouseX, mouseY)
         }
     }
 
