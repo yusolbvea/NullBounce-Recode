@@ -39,7 +39,10 @@ object FastUse : Module("FastUse", Category.PLAYER) {
             usedTimer = false
         }
 
-        if (!isConsumingItem()) {
+        if (
+            !isConsumingItem()
+            || noAir && !serverOnGround
+        ) {
             msTimer.reset()
             return@handler
         }
