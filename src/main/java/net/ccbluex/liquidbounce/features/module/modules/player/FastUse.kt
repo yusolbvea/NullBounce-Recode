@@ -27,6 +27,7 @@ object FastUse : Module("FastUse", Category.PLAYER) {
     private val customTimer by float("CustomTimer", 1.1f, 0.5f..150f) { mode == "Custom" || mode == "Verus" || mode == "Vulcan" || mode == "Timer"}
 
     private val noMove by boolean("StopCurrentMotion", false)
+    private val noAir by boolean("NotWhileInAir", true)
 
     private val msTimer = MSTimer()
     private var usedTimer = false
