@@ -29,7 +29,7 @@ object FastBow : Module("FastBow", Category.COMBAT) {
     private val mode by choices("Mode", arrayOf("Vanilla", "Verus", "Vulcan"), "Vanilla")
     private val packets by int("Packets", 20, 3..20)
     private val delay by int("PacketDelay", 0, 0..300, suffix = "ms")
-    private val noAir by boolean("NotWhileInAir", false)
+    private val noAir by boolean("NotWhileInAir", true)
 
     private val msTimer = MSTimer()
 
