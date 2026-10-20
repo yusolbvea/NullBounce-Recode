@@ -1,4 +1,9 @@
 # NullBounce 1.8.9, Recoded (LibreBounce)
+
+The old private one was a mess
+
+so...
+
 A [libre/free software](https://www.gnu.org/philosophy/free-sw.html), mixin-based injection hacked client for the Forge Mod Loader, version 1.8.9; it's a fork of [LiquidBounce Legacy](https://github.com/CCBlueX/LiquidBounce/tree/legacy) and [LibreBounce](https://github.com/LibreBounce/LibreBounce), aiming to compete with paid & non-libre hacked clients. 
 
 # Slightly better than LiquidBounce B100?
