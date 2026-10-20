@@ -1,16 +1,14 @@
 # NullBounce 1.8.9, Recoded (LibreBounce)
 
-The old private one was a mess
+The private old version was a mess
 
-so...
-
-A [libre/free software](https://www.gnu.org/philosophy/free-sw.html), mixin-based injection hacked client for the Forge Mod Loader, version 1.8.9; it's a fork of [LiquidBounce Legacy](https://github.com/CCBlueX/LiquidBounce/tree/legacy) and [LibreBounce](https://github.com/LibreBounce/LibreBounce), aiming to compete with paid & non-libre hacked clients. 
+A [libre/free software](https://www.gnu.org/philosophy/free-sw.html), mixin-based injection hacked client for the `Forge Mod Loader` for Minecraft 1.8.9; it's a fork of [LiquidBounce Legacy](https://github.com/CCBlueX/LiquidBounce/tree/legacy) and [LibreBounce](https://github.com/LibreBounce/LibreBounce), aiming to compete with paid & non-libre hacked clients. 
 
 # Slightly better than LiquidBounce B100?
 
 :>
 
-For helping purposes with the original LibreBounce dev: If anyone would like to contact me through Discord, my username is `thatonecoder_`. More contact methods may be found through my [Codeberg profile page](https://codeberg.org/thatonecoder), although I cannot guarantee any attempts will be successful.
+For helping purposes with the original LibreBounce dev: *If anyone would like to contact me through Discord, my username is `thatonecoder_`. More contact methods may be found through my [Codeberg profile page](https://codeberg.org/thatonecoder), although I cannot guarantee any attempts will be successful.*
 
 Divergences from LiquidBounce Legacy are listed in the [changelog](CHANGELOG.md); note that there are also many refactors, making the code much cleaner.
 
