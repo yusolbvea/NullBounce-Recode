@@ -54,7 +54,7 @@ abstract class Shader : MinecraftInstance {
         glLinkProgramARB(programId)
         glValidateProgramARB(programId)
         
-        LOGGER.info("[Shader] Successfully loaded: $fragmentShader")
+        LOGGER.info("[Shaders] Successfully loaded: $fragmentShader")
     }
 
     @Throws(IOException::class)
@@ -84,7 +84,7 @@ abstract class Shader : MinecraftInstance {
         glLinkProgramARB(programId)
         glValidateProgramARB(programId)
         
-        LOGGER.info("[Shader] Successfully loaded: " + fragmentShader.name)
+        LOGGER.info("[Shaders] Successfully loaded: " + fragmentShader.name)
     }
 
     open fun startShader() {
@@ -117,7 +117,7 @@ abstract class Shader : MinecraftInstance {
             glCompileShaderARB(shader)
 
             if (glGetObjectParameteriARB(shader, GL_OBJECT_COMPILE_STATUS_ARB) == GL_FALSE)
-                throw RuntimeException("Error creating shader: " + getLogInfo(shader))
+                throw RuntimeException("Error creating the shader: " + getLogInfo(shader))
 
             shader
         } catch (e: Exception) {
