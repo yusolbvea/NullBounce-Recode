@@ -34,7 +34,7 @@ object NoSlow : Module("NoSlow", Category.MOVEMENT, gameDetecting = false) {
 
     private val swordMode by choices(
         "SwordMode",
-        arrayOf("Vanilla", "Vanilla2", "NCP", "UpdatedNCP", "AAC5", "SwitchItem", "InvalidC08", "Blink", "Grim2371"),
+        arrayOf("Vanilla", "Vanilla2", "NCP", "UpdatedNCP", "AAC5", "SwitchItem", "SwitchItem2", "InvalidC08", "Blink", "Grim2360", "OldGrim", "Intave14", "Test"),
         "Vanilla"
     )
 
@@ -45,7 +45,7 @@ object NoSlow : Module("NoSlow", Category.MOVEMENT, gameDetecting = false) {
 
     private val consumeMode by choices(
         "ConsumeMode",
-        arrayOf("Vanilla", "UpdatedNCP", "AAC5", "SwitchItem", "InvalidC08", "Intave", "Drop", "Grim2371"),
+        arrayOf("Vanilla", "UpdatedNCP", "AAC5", "SwitchItem", "InvalidC08", "Intave", "Intave14", "Drop", "Grim2360", "Test"),
         "Vanilla"
     )
 
@@ -62,7 +62,7 @@ object NoSlow : Module("NoSlow", Category.MOVEMENT, gameDetecting = false) {
 
     private val bowPacket by choices(
         "BowMode",
-        arrayOf("Vanilla", "UpdatedNCP", "AAC5", "SwitchItem", "InvalidC08", "Grim2371"),
+        arrayOf("Vanilla", "UpdatedNCP", "AAC5", "SwitchItem", "InvalidC08", "Grim2360"),
         "Vanilla"
     )
 
@@ -81,16 +81,16 @@ object NoSlow : Module("NoSlow", Category.MOVEMENT, gameDetecting = false) {
 
     private val BlinkTimer = TickTimer()
 
-    // Grim2371 variables
-    private val grim2371Timer = TickTimer()
-    private var grim2371DoNotSlow = false
+    // Grim2360 vars
+    private val grim2360Timer = TickTimer()
+    private var grim2360DoNotSlow = false
 
     override fun onDisable() {
         shouldSwap = false
         shouldBlink = true
         BlinkTimer.reset()
         BlinkUtils.unblink()
-        grim2371DoNotSlow = false
+        grim2360DoNotSlow = false
     }
 
     val onMotion = handler<MotionEvent> { event ->
@@ -121,6 +121,20 @@ object NoSlow : Module("NoSlow", Category.MOVEMENT, gameDetecting = false) {
                             shouldSwap = false
                         }
 
+                    "Test" -> {
+                        if (shouldSwap) {
+                            if (event.eventState == EventState.PRE) {
+                                if (player.isUsingItem) {
+                                    sendPacket(C09PacketHeldItemChange(player.inventory.currentItem % 8 + 1))
+                                    sendPacket(C09PacketHeldItemChange(player.inventory.currentItem))
+                                }
+                            } else if (event.eventState == EventState.POST) {
+                                sendPacket(C08PacketPlayerBlockPlacement(player.inventoryContainer.getSlot(player.inventory.currentItem + 36).stack))
+                                shouldSwap = false
+                            }
+                        }
+                    }
+
                     "InvalidC08" -> {
                         if (event.eventState == EventState.PRE) {
                             if (InventoryUtils.hasSpaceInInventory()) {
@@ -135,6 +149,18 @@ object NoSlow : Module("NoSlow", Category.MOVEMENT, gameDetecting = false) {
                             sendPacket(C07PacketPlayerDigging(RELEASE_USE_ITEM, BlockPos.ORIGIN, EnumFacing.UP))
                         }
                     }
+
+                    "Intave14" -> {
+                        if (event.eventState == EventState.PRE) {
+                            if (player.isUsingItem) {
+                                sendPacket(C07PacketPlayerDigging(RELEASE_USE_ITEM, BlockPos.ORIGIN, EnumFacing.UP))
+                            }
+                            if (player.itemInUseCount == 3) {
+                                player.stopUsingItem()
+                                sendPacket(C07PacketPlayerDigging(RELEASE_USE_ITEM, BlockPos.ORIGIN, EnumFacing.UP))
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -146,6 +172,11 @@ object NoSlow : Module("NoSlow", Category.MOVEMENT, gameDetecting = false) {
 
                 "SwitchItem" ->
                     if (event.eventState == EventState.PRE) {
+                        updateSlot()
+                    }
+
+                "SwitchItem2" ->
+                    if (event.eventState == EventState.POST) {
                         updateSlot()
                     }
 
@@ -206,6 +237,17 @@ object NoSlow : Module("NoSlow", Category.MOVEMENT, gameDetecting = false) {
                         updateSlot()
                     }
 
+                "Test" -> {
+                    if (event.eventState == EventState.PRE) {
+                        if (player.isUsingItem) {
+                            sendPacket(C09PacketHeldItemChange(player.inventory.currentItem % 8 + 1))
+                            sendPacket(C09PacketHeldItemChange(player.inventory.currentItem))
+                        }
+                    } else if (event.eventState == EventState.POST) {
+                        sendPacket(C08PacketPlayerBlockPlacement(player.inventoryContainer.getSlot(player.inventory.currentItem + 36).stack))
+                    }
+                }
+
                 "InvalidC08" -> {
                     if (event.eventState == EventState.PRE) {
                         if (InventoryUtils.hasSpaceInInventory()) {
@@ -214,25 +256,43 @@ object NoSlow : Module("NoSlow", Category.MOVEMENT, gameDetecting = false) {
                         }
                     }
                 }
+
+                "OldGrim" -> {
+                    if (event.eventState == EventState.PRE) {
+                        sendPacket(C09PacketHeldItemChange((player.inventory.currentItem % 8) + 1))
+                        sendPacket(C07PacketPlayerDigging(RELEASE_USE_ITEM, BlockPos.ORIGIN, EnumFacing.DOWN))
+                        sendPacket(C09PacketHeldItemChange(player.inventory.currentItem))
+                    } else if (event.eventState == EventState.POST) {
+                        sendPacket(C08PacketPlayerBlockPlacement(BlockPos(-1, -1, -1), 255, heldItem, 0f, 0f, 0f))
+                    }
+                }
+
+                "Intave14" -> {
+                    if (event.eventState == EventState.PRE) {
+                        if (player.isMoving) {
+                            sendPacket(C07PacketPlayerDigging(RELEASE_USE_ITEM, BlockPos.ORIGIN, EnumFacing.DOWN))
+                            sendPacket(C08PacketPlayerBlockPlacement(BlockPos(-1, -1, -1), 255, heldItem, 0f, 0f, 0f))
+                        }
+                    }
+                }
             }
         }
 
-        // --- Grim2371 integration ---
         if (isUsingItem && (
-                    swordMode == "Grim2371" && heldItem.item is ItemSword ||
-                            consumeMode == "Grim2371" && (heldItem.item is ItemFood || heldItem.item is ItemPotion || heldItem.item is ItemBucketMilk) ||
-                            bowPacket == "Grim2371" && heldItem.item is ItemBow
+                    swordMode == "Grim2360" && heldItem.item is ItemSword ||
+                            consumeMode == "Grim2360" && (heldItem.item is ItemFood || heldItem.item is ItemPotion || heldItem.item is ItemBucketMilk) ||
+                            bowPacket == "Grim2360" && heldItem.item is ItemBow
                     )
         ) {
-            grim2371Timer.update()
-            if (grim2371Timer.hasTimePassed(3)) {
+            grim2360Timer.update()
+            if (grim2360Timer.hasTimePassed(3)) {
                 sendPacket(C08PacketPlayerBlockPlacement(BlockPos(-1, -1, -1), 255, heldItem, 0f, 0f, 0f))
-                grim2371DoNotSlow = true
-                grim2371Timer.reset()
+                grim2360DoNotSlow = true
+                grim2360Timer.reset()
             }
         }
 
-        if (!isUsingItem && grim2371DoNotSlow) grim2371DoNotSlow = false
+        if (!isUsingItem && grim2360DoNotSlow) grim2360DoNotSlow = false
     }
 
     val onPacket = handler<PacketEvent> { event ->
@@ -326,7 +386,11 @@ object NoSlow : Module("NoSlow", Category.MOVEMENT, gameDetecting = false) {
                                 packet.stack.item is ItemFood ||
                                         packet.stack.item is ItemPotion ||
                                         packet.stack.item is ItemBucketMilk)) ||
-                        (bowPacket == "UpdatedNCP" && packet.stack.item is ItemBow)
+                        (bowPacket == "UpdatedNCP" && packet.stack.item is ItemBow) ||
+                        (consumeMode == "Test" && (
+                                packet.stack.item is ItemFood ||
+                                        packet.stack.item is ItemPotion ||
+                                        packet.stack.item is ItemBucketMilk))
                     ) {
                         shouldSwap = true
                     }
@@ -338,15 +402,14 @@ object NoSlow : Module("NoSlow", Category.MOVEMENT, gameDetecting = false) {
     val onSlowDown = handler<SlowDownEvent> { event ->
         val heldItem = mc.thePlayer.heldItem?.item
 
-        // Grim2371 bypass check
-        if ((swordMode == "Grim2371" && heldItem is ItemSword) ||
-            (consumeMode == "Grim2371" && (heldItem is ItemFood || heldItem is ItemPotion || heldItem is ItemBucketMilk)) ||
-            (bowPacket == "Grim2371" && heldItem is ItemBow)
+        if ((swordMode == "Grim2360" && heldItem is ItemSword) ||
+            (consumeMode == "Grim2360" && (heldItem is ItemFood || heldItem is ItemPotion || heldItem is ItemBucketMilk)) ||
+            (bowPacket == "Grim2360" && heldItem is ItemBow)
         ) {
-            if (grim2371DoNotSlow) {
+            if (grim2360DoNotSlow) {
                 event.forward = 1.0f
                 event.strafe = 1.0f
-                grim2371DoNotSlow = false
+                grim2360DoNotSlow = false
                 return@handler
             }
         }
